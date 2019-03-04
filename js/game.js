@@ -5,35 +5,68 @@ function Init() {
             document.getElementById('game').innerHTML += '<div data-x="' + i + '" data-y="' + j + '"class = "block"></div>';
 
         }
-    var btn = document.createElement('input');
-    btn.type = 'button'; // или 'submit', или 'reset';
-    btn.id = 'reset';
-    btn.value = 'Reset'; // или 'Отправить', или 'Очистить'...
-    btn.style.cssText = 'color: red; margin-top: 10px; ...';
-    btn.onclick = Reset;
+        document.getElementById('game').innerHTML += '<input type="checkbox" checked id="cbVersusPC">VersusPc';
+        var btn = document.createElement('input');
+        btn.type = 'button'; // или 'submit', или 'reset';
+        btn.id = 'reset';
+        btn.value = 'Reset'; // или 'Отправить', или 'Очистить'...
+        btn.style.cssText = 'color: red; margin-top: 10px; ...';
+        btn.onclick = Reset;
+        document.getElementById('game').appendChild(btn);
+   
+    //document.getElementById('game').appendChild(cbVersusPC);
+    //document.getElementById('cbVersusPC').checked = false;
+    
+}
 
-    // "приживление" кнопки
-    // вариант первый: перед закрывающим тегом какого-нить тега-контейнера с id="myPlace"
-    document.getElementById('game').appendChild(btn);
+function Build(game)
+{
+    var k = 0;
+    for (var i = 0; i < 3; i++)
+    {
+        for (var j = 0; j < 3; j++)
+        {
+            pbs[k].innerHTML = game.Items[i][j] == FieldState.Cross ? Cross : (game.Items[i][j] == FieldState.Nought ? Nought : null);
+            k++;
+        }
+      
+    }
 }
 function Reset()
 {
     game = new Game();
-    var pbs = document.getElementsByClassName('block');
-    for (var i = 0; i < 9; i++)
-    pbs[i].innerHTML = null;
+    Build(game);
 }
 
 var Cross = '<img src = "images/cross.png">';
 var Nought = '<img src = "images/circle.png">';
 var game = new Game();
 Init();
+var pbs = document.getElementsByClassName('block');
 document.getElementById('game').onclick = function (event) {
     if (event.target.className == 'block') {
         var x = event.target.dataset.x;
         var y = event.target.dataset.y;
-        game.MakeMove(x, y);
-        event.target.innerHTML = game.Items[x][y] == FieldState.Cross ? Cross : Nought;
+        game.MakeMove(x,y);
+         //делаем ответный ход
+         if (document.getElementById('cbVersusPC').checked && !game.Winned)
+         {
+             var m = new AI().Move(game);
+             
+             if(m != null)
+             {
+                var x = m.charAt(0);
+                var y = m.charAt(2);
+                game.MakeMove(x,y);
+                
+                
+
+             }
+           
+                 
+        }
+        Build(game);
+        //event.target.innerHTML = game.Items[x][y] == FieldState.Cross ? Cross : (game.Items[x][y] == FieldState.Nought ? Nought : null);
         if (game.Winned)
             alert(`${game.CurrentPlayer == 0 ? "Cross" : "Nought"} is winner!`);
     }
