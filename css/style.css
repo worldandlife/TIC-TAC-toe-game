@@ -12,4 +12,5 @@
     border:1px solid black;
     box-sizing: border-box;
     cursor: pointer;
+    text-align: center;
 }
