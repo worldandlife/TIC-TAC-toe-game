@@ -1,0 +1,15 @@
+#game 
+{
+    width: 450px;
+    height: 450px;
+    background: whitesmoke;
+}
+.block 
+{
+    width:150px;
+    height: 150px;
+    float: left;
+    border:1px solid black;
+    box-sizing: border-box;
+    cursor: pointer;
+}
